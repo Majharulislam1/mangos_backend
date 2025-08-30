@@ -6,6 +6,9 @@ const createOrder = async(req:Request,res:Response)=>{
       const data = req.body;
       const create_order = await Order.create(data);
 
+      const erro =   await create_order.checkStocks(create_order.mangoId.toString());
+      
+
       res.send({
            success:true,
            message:'order created successfully',

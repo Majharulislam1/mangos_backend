@@ -1,9 +1,8 @@
 import { model, Schema } from "mongoose";
-import { IOrder } from "./orders.interface";
+import { IOrder, IorderMethods, IOrderModel } from "./orders.interface";
 import { Mango } from "../mango/mangos.model";
 
-
-const order_models = new Schema<IOrder>({
+const order_models = new Schema<IOrder,IOrderModel,IorderMethods>({
 
     userId: { type: Schema.Types.ObjectId, ref: "userSchema", required: true },
     mangoId: { type: Schema.Types.ObjectId, ref: "mango", required: true },
@@ -29,7 +28,20 @@ order_models.pre('save', async function () {
 })
 
 
+order_models.method("checkStocks", async function (id: string) {
+  const product = await Mango.findById(id);
+  if (!product) throw new Error("Product not found");
 
-const Order = model('oreder', order_models);
+  if (product.stock < this.quantity) {
+    throw new Error("Insufficient stock");
+  }
+
+  return true;
+});
+
+
+
+
+const Order = model<IOrder,IOrderModel>('oreder', order_models);
 
 export default Order;
