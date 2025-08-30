@@ -28,16 +28,27 @@ order_models.pre('save', async function () {
 })
 
 
-order_models.method("checkStocks", async function (id: string) {
-  const product = await Mango.findById(id);
-  if (!product) throw new Error("Product not found");
+// order_models.method("checkStocks", async function (id: string) {
+//   const product = await Mango.findById(id);
+//   if (!product) throw new Error("Product not found");
 
-  if (product.stock < this.quantity) {
-    throw new Error("Insufficient stock");
-  }
+//   if (product.stock < this.quantity) {
+//     throw new Error("Insufficient stock");
+//   }
+
+//   return true;
+// });
+
+order_models.statics.checkStocks = async function (id: string) {
+  const product = await Mango.findById(id);
+  if (product) throw new Error("Product not found ... ha ha ha ");
+
+  // if (product.stock <= 0) {
+  //   throw new Error("Insufficient stock");
+  // }
 
   return true;
-});
+};
 
 
 

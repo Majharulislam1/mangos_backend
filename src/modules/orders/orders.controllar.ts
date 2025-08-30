@@ -1,33 +1,44 @@
 import { Request, Response } from "express";
 import Order from "./oreders.model";
 
-const createOrder = async(req:Request,res:Response)=>{
+const createOrder = async (req: Request, res: Response) => {
 
       const data = req.body;
+      await Order.checkStocks(data.mangoId);
+
       const create_order = await Order.create(data);
 
-      const erro =   await create_order.checkStocks(create_order.mangoId.toString());
-      
+
+      // static methods 
+      // const data = req.body;
+      // const create_order = await Order.create(data);
+
+      // const erro =   await create_order.checkStocks(create_order.mangoId.toString());
+
+
+
+
+
 
       res.send({
-           success:true,
-           message:'order created successfully',
-           create_order
+            success: true,
+            message: 'order created successfully',
+            create_order
       })
 
 
 }
 
 
-const getOrder = async(req:Request,res:Response) =>{
-      const  allData = await Order.find()
-      .populate("userId", "name email role")   
-      .populate("mangoId", "name price origin");
+const getOrder = async (req: Request, res: Response) => {
+      const allData = await Order.find()
+            .populate("userId", "name email role")
+            .populate("mangoId", "name price origin");
 
       res.send({
-          success:true,
-          message:'All Order',
-          allData
+            success: true,
+            message: 'All Order',
+            allData
       })
 }
 
@@ -35,7 +46,7 @@ const getOrder = async(req:Request,res:Response) =>{
 
 
 
-export{
-     createOrder,
-     getOrder
+export {
+      createOrder,
+      getOrder
 }

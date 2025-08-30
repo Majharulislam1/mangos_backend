@@ -17,8 +17,14 @@ export interface IOrder {
 }
 
 
+
+// instance methods 
 export interface IorderMethods {
         checkStocks(id: string): Promise<any>;
 }
 
-export interface IOrderModel extends Model<IOrder, {}, IorderMethods> { };
+// static methods 
+
+export interface IOrderModel extends Model<IOrder, {}, IorderMethods> {
+       checkStocks(id:string):Promise<any>;
+ };
